@@ -1,0 +1,5 @@
+ # create a variable to store the formatted date
+ $date = Get-Date -format "yyyyMMdd"
+
+# run sqlpackage with parameters to extract the dacpac to a specified path
+ sqlpackage.exe /Action:Extract /TargetFile:D:\SQLServerBackup\$date'_lakehouse.dacpac' /SourceConnectionString:"Authentication=Active Directory Interactive; Data Source=***EnterYourServerlessSQLendpoint***;Initial Catalog=***databasename*;"

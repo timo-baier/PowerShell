@@ -1,30 +1,20 @@
 az-login
-
 Connect-AzAccount
-
 $myIP = (Invoke-WebRequest -uri "https://api.ipify.org/").Content
 $myIP
 $myName = az account show --query user.name --output tsv
 $myName
-
 Set-AzContext -Subscription ***EnterYourAzureSubscriptionID***
-
 # if you add the rule you can overwrite it the next day, otherwise add and remove it after you're done
 #Add-AzSynapseFirewallRule -WorkspaceName ***EnterYourAzureSynapseWorkspaceName*** -Name $myName -StartIpAddress $myIP -EndIpAddress $myIP
 Update-AzSynapseFirewallRule -WorkspaceName ***EnterYourAzureSynapseWorkspaceName*** -Name $myName -StartIpAddress $myIP -EndIpAddress $myIP
-
 # define ResourceGroupName necessary
 Add-AzStorageAccountNetworkRule -ResourceGroupName ***EnterYourResourceGroupName*** -Name ***EnterYourStorageAccountName***  -IPAddressOrRange $myIP
-
 # for asqldb you need a name for the rule, I recommend to use the users/your E-Mail Address
 Set-AzSqlServerFirewallRule -ResourceGroupName ***EnterYourResourceGroupName*** -ServerName ***EnterYourAzureSQLServerName*** -FirewallRuleName $myName -StartIpAddress $myIP -EndIpAddress $myIP
-
-
 # remove previously set rules (only valid if the ip/naming is the same)
 Remove-AzSynapseFirewallRule -WorkspaceName ***EnterYourAzureSynapseWorkspaceName*** -Name $myName -StartIpAddress $myIP -EndIpAddress $myIP
-
 # define ResourceGroupName necessary
 Remove-AzStorageAccountNetworkRule -ResourceGroupName ***EnterYourResourceGroupName*** -Name ***EnterYourStorageAccountName***  -IPAddressOrRange $myIP
-
 # for asqldb you need a name for the rule, I recommend to use the users/your E-Mail Address
 Remove-AzSqlServerFirewallRule -ResourceGroupName ***EnterYourResourceGroupName*** -ServerName ***EnterYourAzureSQLServerName*** -FirewallRuleName $myName -StartIpAddress $myIP -EndIpAddress $myIP
